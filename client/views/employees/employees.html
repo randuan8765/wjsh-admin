@@ -1,0 +1,29 @@
+<template name="employees">
+  <h2>人员列表</h2>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Age</td>
+        <td style="width: 70px"></td>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each people}}
+        <tr>
+          <td>{{firstName}} {{lastName}}</td>
+          <td>{{age}}</td>
+          <td style="width: 70px">{{> quickRemoveButton collection=Collections.People _id=this._id class="btn btn-sm btn-danger"}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <div class="panel panel-default">
+      <div class="panel-heading">
+          <h4>注册新员工</h4>
+      </div>
+      <div class="panel-body">
+        {{> quickForm id="employees" schema=Schemas.Employees }}
+      </div>
+  </div>
+</template>
