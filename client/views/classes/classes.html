@@ -3,17 +3,21 @@
   <table class="table table-bordered table-hover">
     <thead>
       <tr>
-        <td>Name</td>
-        <td>Age</td>
+        <td>分类</td>
+        <td>瑕疵</td>
+		<td>洗后效果</td>
+		<td>配件</td>
         <td style="width: 70px"></td>
       </tr>
     </thead>
     <tbody>
-      {{#each people}}
+      {{#each classes}}
         <tr>
-          <td>{{firstName}} {{lastName}}</td>
-          <td>{{age}}</td>
-          <td style="width: 70px">{{> quickRemoveButton collection=Collections.People _id=this._id class="btn btn-sm btn-danger"}}</td>
+          <td>{{name}}</td>
+          <td>{{flaws}}</td>
+		  <td>{{effects}}</td>
+		  <td>{{accessories}}</td>
+          <td style="width: 70px">{{> quickRemoveButton collection="Classes" _id=this._id class="btn btn-sm btn-danger"}}</td>
         </tr>
       {{/each}}
     </tbody>

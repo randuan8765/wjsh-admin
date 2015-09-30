@@ -3,17 +3,17 @@
   <table class="table table-bordered table-hover">
     <thead>
       <tr>
-        <td>Name</td>
-        <td>Age</td>
+        <td>全称</td>
+        <td>地域信息</td>
         <td style="width: 70px"></td>
       </tr>
     </thead>
     <tbody>
-      {{#each people}}
+      {{#each stores}}
         <tr>
-          <td>{{firstName}} {{lastName}}</td>
-          <td>{{age}}</td>
-          <td style="width: 70px">{{> quickRemoveButton collection=Collections.People _id=this._id class="btn btn-sm btn-danger"}}</td>
+		  <td>{{name}}</td>
+          <td>{{address.area}} {{address.street}}</td>
+          <td style="width: 70px">{{> quickRemoveButton collection="Stores" _id=this._id class="btn btn-sm btn-danger"}}</td>
         </tr>
       {{/each}}
     </tbody>

@@ -11,6 +11,8 @@ Classes.allow({
   remove: function () { return true; }
 });
 
+
+
 Employees = new Mongo.Collection("employees");
 Employees.attachSchema(Schemas.Employees);
 
