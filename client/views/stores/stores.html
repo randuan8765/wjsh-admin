@@ -23,7 +23,17 @@
           <h4>注册新门店</h4>
       </div>
       <div class="panel-body">
-        {{> quickForm id="stores" schema=Schemas.Stores }}
+        {{#autoForm collection="Stores" id="insertStoreForm" type="insert"}}
+			<fieldset>
+				{{> afQuickField name='name'}}
+				{{> afQuickField name='aliase'}}
+				{{> afQuickField name='address'}}
+				{{> afQuickField name='contacts'}}
+				{{> afQuickField name='description'}}
+				{{> afQuickField name='registerFormId'}}
+			</fieldset>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		{{/autoForm}}
       </div>
   </div>
 </template>

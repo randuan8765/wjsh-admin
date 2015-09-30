@@ -23,7 +23,7 @@
           <h4>注册新员工</h4>
       </div>
       <div class="panel-body">
-        {{> quickForm id="employees" schema=Schemas.Employees }}
+        {{> quickForm collection="Employees" id="insertEmployeeForm" type="insert"}}
       </div>
   </div>
 </template>
