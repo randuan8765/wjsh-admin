@@ -12,7 +12,7 @@
     </thead>
     <tbody>
       {{#each classes}}
-        <tr>
+        <tr class="class-row {{#if isSelectedClass}}selected{{/if}}">
           <td>{{name}}</td>
           <td>{{flaws}}</td>
 		  <td>{{effects}}</td>
@@ -27,7 +27,7 @@
           <h4>分类</h4>
       </div>
       <div class="panel-body">
-        {{> quickForm collection="Classes" id="insertClassForm" type="insert"}}
+        {{> quickForm collection="Classes" id="insertClassForm" type=formType doc=selectedClassDoc}}
       </div>
   </div>
 </template>

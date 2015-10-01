@@ -12,7 +12,7 @@
     </thead>
     <tbody>
       {{#each employees}}
-        <tr>
+        <tr class="employee-row {{#if isSelectedEmployee}}selected{{/if}}">
           <td>{{name}}</td>
           <td>{{mobile}}</td>
 		  <td>{{staffId}}</td>
@@ -27,7 +27,7 @@
           <h4>注册新员工</h4>
       </div>
       <div class="panel-body">
-        {{> quickForm collection="Employees" id="insertEmployeeForm" type="insert"}}
+        {{> quickForm collection="Employees" id="insertEmployeeForm" type=formType doc=selectedEmployeeDoc}}
       </div>
   </div>
 </template>

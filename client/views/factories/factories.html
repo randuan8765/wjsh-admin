@@ -11,7 +11,7 @@
     </thead>
     <tbody>
       {{#each factories}}
-        <tr>
+        <tr class="factory-row {{#if isSelectedFactory}}selected{{/if}}">
           <td>{{key}}</td>
           <td>{{name}}</td>
 		  <td>{{address.city}} {{address.district}} {{address.street}}</td>
@@ -25,7 +25,7 @@
           <h4>添加洗涤厂</h4>
       </div>
       <div class="panel-body">
-        {{> quickForm collection="Factories" id="insertFactorieForm" type="insert"}}
+        {{> quickForm collection="Factories" id="insertFactorieForm" type=formType doc=selectedFactoryDoc}}
       </div>
   </div>
 </template>

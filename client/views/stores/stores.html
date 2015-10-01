@@ -10,7 +10,7 @@
     </thead>
     <tbody>
       {{#each stores}}
-        <tr>
+        <tr class="store-row {{#if isSelectedStore}}selected{{/if}}">
 		  <td>{{name}}</td>
           <td>{{address.area}} {{address.street}}</td>
           <td style="width: 70px">{{> quickRemoveButton collection="Stores" _id=this._id class="btn btn-sm btn-danger"}}</td>
@@ -23,7 +23,7 @@
           <h4>注册新门店</h4>
       </div>
       <div class="panel-body">
-        {{#autoForm collection="Stores" id="insertStoreForm" type="insert"}}
+        {{#autoForm collection="Stores" id="insertStoreForm" type=formType doc=selectedStoreDoc}}
 			<fieldset>
 				{{> afQuickField name='name'}}
 				{{> afQuickField name='aliase'}}
