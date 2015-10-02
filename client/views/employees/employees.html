@@ -27,7 +27,18 @@
           <h4>注册新员工</h4>
       </div>
       <div class="panel-body">
-        {{> quickForm collection="Employees" id="insertEmployeeForm" type=formType doc=selectedEmployeeDoc}}
+	    {{#autoForm collection="Employees" id="insertEmployeeForm" type=formType doc=selectedEmployeeDoc}}
+		 <fieldset>
+		  {{> afQuickField name='name'}}
+		  {{> afQuickField name='mobile'}}
+		  {{> afQuickField name='staffId'}}
+		  {{> afQuickField name='type' class='type'}}
+		  {{#if showRegisterForm}}
+		  {{> afQuickField name='registerFormIds'}}
+		  {{/if}}
+		 </fieldset>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		{{/autoForm}}
       </div>
   </div>
 </template>

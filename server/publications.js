@@ -17,3 +17,13 @@ Meteor.publish('areas', function() {
 Meteor.publish('stores', function() {
   return Stores.find();
 });
+
+Meteor.publish('users', function() {
+  return Meteor.users.find();
+});
+
+Meteor.users.allow({
+    update: function(userId, docs, fields, modifier) {
+	return true;
+	}
+ });

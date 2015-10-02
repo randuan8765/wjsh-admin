@@ -1,3 +1,15 @@
+SimpleSchema.messages({
+  "uniqueError": "系统中已有这个[label]"
+});
+
+SimpleSchema.messages({
+  "noUser": "系统中没有手机号为[value]的用户"
+});
+
+SimpleSchema.messages({
+  "noArea": "系统中没有区域编号为[value]的地区"
+});
+
 Schemas = {};
 
 Meteor.isClient && Template.registerHelper("Schemas", Schemas);
@@ -146,9 +158,15 @@ Schemas.Factories = new SimpleSchema({ //autoform框架，修改field能直接�
 Schemas.Areas = new SimpleSchema({ //autoform框架，修改field能直接变更一切schema todo：调格式，按照bootstrap
   key: {
     type: String, //TJ-NK-01
-    label: "区域编号"
+    label: "区域编号",
+	//custom: function () {
+	//	if (Areas.findOne({key:this.value}) !== undefined)
+	//	{
+	//		return "uniqueError";
+	//	}
+    //}
     //index: 1,
-    //unique: true
+    unique: true
   },
   name: {
     type: String,
@@ -234,7 +252,14 @@ Schemas.Employees = new SimpleSchema({ //autoform框架，修改field能直接�
   },
   staffId: {
     type: String,
-    label: "工号"
+    label: "工号",
+	unique: true
+	//custom: function () {
+	//	if (Employees.findOne({staffId:this.value}) !== undefined && this.formType == "insert")
+	//	{
+	//		return "uniqueError";
+	//	}
+    //}
   },
   type: {
     type: String,
@@ -251,10 +276,12 @@ Schemas.Employees = new SimpleSchema({ //autoform框架，修改field能直接�
   },
   registerFormIds: { //每append一条，要记录时间
     type: Array,
-    label: "申请表编号"
+    label: "申请表编号",
+	optional: true
   },
   'registerFormIds.$': {
     type: String,
+	optional: true
   },
 });
 
@@ -267,6 +294,16 @@ Schemas.Stores = new SimpleSchema({ //autoform框架，修改field能直接变�
     type: String,
     label: "简称"
   },
+  creator: {
+    type: String,
+    label: "创建用户手机",
+	custom: function () {
+		if (Meteor.users.find({username:this.value}).fetch().length == 0)
+		{
+			return "noUser";
+		}
+    }
+  },
   address: {
     type: Object,
     label: "地域信息",
@@ -274,6 +311,11 @@ Schemas.Stores = new SimpleSchema({ //autoform框架，修改field能直接变�
   'address.area': {//要在area里创建
     type: String,
     label: "所属区域编号",
+	custom: function (){
+		if(Areas.findOne({key:this.value}) == undefined){
+			return "noArea";
+		}
+	}
   },
   'address.street': {
     type: String,

@@ -25,7 +25,18 @@
           <h4>添加洗涤厂</h4>
       </div>
       <div class="panel-body">
-        {{> quickForm collection="Factories" id="insertFactorieForm" type=formType doc=selectedFactoryDoc}}
+	    {{#autoForm collection="Factories" id="insertFactorieForm" type=formType doc=selectedFactoryDoc}}
+		<fieldset>
+			{{> afQuickField name='key'}}
+			{{> afQuickField name='name'}}
+			{{> afQuickField name='aliase'}}
+			{{> afQuickField name='address'}}
+			{{> afQuickField name='contacts'}}
+			{{> afQuickField name='description'}}
+			{{> afQuickField name='businesses'}}
+		</fieldset>
+		<button type="submit" class="btn btn-primary">Submit</button>
+		{{/autoForm}}
       </div>
   </div>
 </template>

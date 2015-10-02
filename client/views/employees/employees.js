@@ -16,6 +16,15 @@ Template.employees.helpers({
     } else {
       return "insert";
     }
+  },
+  showRegisterForm:function(){
+	  var choice = AutoForm.getFieldValue('type', 'insertEmployeeForm');
+	  if(choice == "pre")
+	  {
+		  return true;
+	  }else{
+		  return false;
+	  }
   }
 });
 

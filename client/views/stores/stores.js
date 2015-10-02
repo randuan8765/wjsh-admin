@@ -1,4 +1,5 @@
 Meteor.subscribe('stores');
+Meteor.subscribe('users');
 
 Template.stores.helpers({
   stores: function () {
@@ -22,5 +23,11 @@ Template.stores.helpers({
 Template.stores.events({
   'click .store-row': function () {
     Session.set("selectedStoreId", this._id);
+  },
+  'submit #insertStoreForm': function(event){
+	  event.preventDefault();
+	  var username = event.target.creator.value
+	  var userId = Meteor.users.findOne({username:username})._id
+	  Meteor.users.update({_id: userId}, {$set:{'profile.storeId':this._id}});
   }
 });
