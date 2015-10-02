@@ -17,6 +17,7 @@ Template.factories.helpers({
       return "insert";
     }
   }
+
 });
 
 Template.factories.events({

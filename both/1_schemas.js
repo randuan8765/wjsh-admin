@@ -8,9 +8,18 @@ SimpleSchema.messages({
 
 SimpleSchema.messages({
   "noArea": "系统中没有区域编号为[value]的地区"
+});  
+
+SimpleSchema.messages({
+  "noFactory": "系统中没有厂编号为[value]的工厂"
 });
 
+SimpleSchema.messages({
+  "noFactoryBusiness": "该厂没有编号为[value]的业务"
+});
 Schemas = {};
+
+var temp;
 
 Meteor.isClient && Template.registerHelper("Schemas", Schemas);
 
@@ -120,6 +129,10 @@ Schemas.Factories = new SimpleSchema({ //autoform框架，修改field能直接�
   'businesses.$': {
     type: Object,
   },
+  'businesses.$.factory': {
+    type: String,
+    label: "洗涤厂业务编号",
+  },
   'businesses.$.name': {
     type: String,
     label: "名称",
@@ -131,19 +144,6 @@ Schemas.Factories = new SimpleSchema({ //autoform框架，修改field能直接�
        step: "0.01"
     },
     label: "成本价"
-  },
-  'businesses.$.class': {
-    type: String,
-    autoform: {
-      type: "select-radio-inline",
-      options: function () {
-        return [
-          {label: "鞋靴", value: "鞋靴"}, //看下怎么设置default
-          {label: "皮具", value: "皮具"}
-        ];
-      }
-    },
-    label: "所属分类（来自于分类列表）"
   },
   'businesses.$.description': {
     type: String,
@@ -210,18 +210,51 @@ Schemas.Areas = new SimpleSchema({ //autoform框架，修改field能直接变更
     optional: true
   },
   'businesses.$': {
-    type: Object,
-  },
-  'businesses.$.key': {
-    type: String,
-    label: "编号（<洗涤厂编号>_<洗涤厂业务编号>）", //后期变成前端自动选取某个洗涤厂，
+    type: Object,  //后期变成前端自动选取某个洗涤厂，
                                                 //然后多选从该洗涤厂想要继承下来的业务及
                                                 //对应价格，并可调整个别继承下来的价格作
                                                 //为卖给夫妻店的低价 ，但是表结构不变
   },
+  'businesses.$.factoryKey': {
+    type: String,
+    label: "洗涤厂编号", 
+	custom: function (){
+		temp = this.value
+		if(Factories.findOne({key:this.value}) == undefined){
+			return "noFactory";
+		}
+	}
+  },
+  'businesses.$.key': {
+    type: String,
+    label: "洗涤厂业务编号",
+	custom: function (){
+		if(Factories.findOne({"businesses.factory":this.value,key:temp}) == undefined){
+			return "noFactoryBusiness";
+		}
+	}
+  },
   'businesses.$.name': {
     type: String,
     label: "名称",
+  },
+  'businesses.$.class': {
+    type: String,
+    autoform: {
+      type: "select-radio-inline",
+      options: function () {
+        var options = [];
+		Classes.find().fetch().forEach(function (element){
+			options.push({
+				label: element.name, value: element.name
+			}
+			)
+		}
+		)
+		return options
+      }
+    },
+    label: "所属分类"
   },
   'businesses.$.price': {
     type: Number,

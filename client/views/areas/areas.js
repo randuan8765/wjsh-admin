@@ -16,6 +16,15 @@ Template.areas.helpers({
     } else {
       return "insert";
     }
+  },
+    classes: function(){
+	  var temp = [];
+	  var count = 0;
+	  for(var Class in Classes.find().fetch()){
+		  temp[count] = Class.name;
+		  count++;
+	  }
+	  return temp;
   }
 });
 
