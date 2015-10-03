@@ -31,6 +31,13 @@ Template.stores.events({
 	  var username = event.target.creator.value;
 	  userId = Meteor.users.findOne({username:username})._id;
 	  storeName = event.target.name.value;
+	  
+	  var AreaId = event.currentTarget.area.value;
+	  Session.set("AreaId", AreaId);
 	  synFunction(userId,storeName);
+  },
+  'submit #insertStoreClassForm': function(event){
+	  var className = event.target.name.value;
+	  afterInsertStoreClassFormSubmit(className);
   }
 });

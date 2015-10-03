@@ -23,17 +23,31 @@
           <h4>注册新门店</h4>
       </div>
       <div class="panel-body">
-        {{#autoForm collection="Stores" id="insertStoreForm" type=formType doc=selectedStoreDoc}}
+        {{#autoForm collection="Stores" id="insertStoreForm" type=formType doc=selectedStoreDoc resetOnSuccess=false}}
 			<fieldset>
 				{{> afQuickField name='name'}}
 				{{> afQuickField name='aliase'}}
 				{{> afQuickField name='creator'}}
-				{{> afQuickField name='address'}}
+				{{> afQuickField name='area'}}
+				{{> afQuickField name='street'}}
 				{{> afQuickField name='contacts'}}
 				{{> afQuickField name='description'}}
 				{{> afQuickField name='registerFormId'}}
 			</fieldset>
 			<button type="submit" class="btn btn-primary">Submit</button>			
+		{{/autoForm}}
+		{{#autoForm collection="StoreClasses" id="insertStoreClassForm" resetOnSuccess=false type="insert"}}
+			<fieldset>	
+				{{> afQuickField name='name'}}				
+			</fieldset>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		{{/autoForm}}
+		
+		{{#autoForm collection="StoreBusinesses" id="insertStoreBusinesseForm" resetOnSuccess=false type="insert"}}
+			<fieldset>	
+				{{> afQuickField name='name'}}				
+			</fieldset>
+			<button type="submit" class="btn btn-primary">Submit</button>
 		{{/autoForm}}
       </div>
   </div>

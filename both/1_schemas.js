@@ -337,11 +337,7 @@ Schemas.Stores = new SimpleSchema({ //autoform框架，修改field能直接变�
 		}
     }
   },
-  address: {
-    type: Object,
-    label: "地域信息",
-  },
-  'address.area': {//要在area里创建
+  area : {//要在area里创建
     type: String,
     label: "所属区域编号",
 	custom: function (){
@@ -350,7 +346,7 @@ Schemas.Stores = new SimpleSchema({ //autoform框架，修改field能直接变�
 		}
 	}
   },
-  'address.street': {
+  street : {
     type: String,
     label: "具体地址",
   },
@@ -386,51 +382,5 @@ Schemas.Stores = new SimpleSchema({ //autoform框架，修改field能直接变�
     type: String,
     label: "申请表编号",
     optional: true
-  },
-  classes: {//由夫妻店用自己的saas client操作
-    type: Array,
-    label: "门店内部业务分类",
-    optional: true,
-    minCount: 1,
-    maxCount: 4
-  },
-  "classes.$": {
-    type: String
-  },
-  businesses: {//由夫妻店用自己的saas client操作
-    type: Array,
-    label: "门店内部价目表",
-    optional: true
-  },
-  'businesses.$': {
-    type: Object,
-  },
-  'businesses.$.name': {
-    type: String,
-    label: "名称",
-  },
-  'businesses.$.price': {
-    type: Number,
-    decimal: true,
-    autoform: {
-       step: "0.01"
-    },
-    label: "门店对外定价"
-  },
-  'businesses.$.class': {
-    type: String,
-    label: "业务类别（来自于门店定义的class）"
-  },
-  'businesses.$.order': {
-    type: Number,
-    label: "顺序"
-  },
-  'businesses.$.description': {
-    type: String,
-    label: "描述",
-    autoform: {
-       rows: 3
-    },
-    optional: true
-  },
+  }
 });
