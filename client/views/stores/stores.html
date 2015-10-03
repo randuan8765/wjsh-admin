@@ -12,7 +12,7 @@
       {{#each stores}}
         <tr class="store-row {{#if isSelectedStore}}selected{{/if}}">
 		  <td>{{name}}</td>
-          <td>{{address.area}} {{address.street}}</td>
+          <td>{{area}} {{street}}</td>
           <td style="width: 70px">{{> quickRemoveButton collection="Stores" _id=this._id class="btn btn-sm btn-danger"}}</td>
         </tr>
       {{/each}}
@@ -45,7 +45,7 @@
 		
 		{{#autoForm collection="StoreBusinesses" id="insertStoreBusinesseForm" resetOnSuccess=false type="insert"}}
 			<fieldset>	
-				{{> afQuickField name='name'}}				
+				{{> afFormGroup name="name"}}				
 			</fieldset>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		{{/autoForm}}

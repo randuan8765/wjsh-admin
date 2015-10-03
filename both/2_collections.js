@@ -91,7 +91,7 @@ StoreBusinesses.attachSchema(new SimpleSchema({
   name: {
     type: String,
 	autoform: {
-      type: "select-radio-inline",
+      //type: "select-radio-inline",
       options: function () {
         var options = [];
 		if(Session.get("AreaId") !== undefined){
