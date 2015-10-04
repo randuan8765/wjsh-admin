@@ -1,5 +1,5 @@
 <template name="storeBusinesses">
-  <h2>{{store.name}}门店业务列表</h2>
+  <h2>{{store.name}}门店业务分类</h2>
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -18,9 +18,17 @@
       {{/each}}
     </tbody>
   </table>
+  {{#if isInsert}}
+  {{else}}
+    <button type="button" class="btn btn-default form-to-insert pull-right">新分类</button>
+  {{/if}}
   <div class="panel panel-default">
       <div class="panel-heading">
-          <h4>添加分类</h4>
+        {{#if isInsert}}
+          <h4>增加分类</h4>
+        {{else}}
+          <h4>修改分类名</h4>
+        {{/if}}
       </div>
       <div class="panel-body">
         {{#autoForm collection="StoreClasses" id="insertStoreClassForm" type=formType doc=selectedStoreClassDoc}}
@@ -32,4 +40,47 @@
     		{{/autoForm}}
     </div>
   </div>
+
+  {{#if isInsert}}
+  {{else}}
+  <div class="row"><div class="col-xs-1"></div><div class="col-xs-10">
+    <h3>{{selectedStoreClassDoc.name}}类业务列表</h3>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <td>分类</td>
+          <td style="width: 70px"></td>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each storeClassBusinesses}}
+          <tr class="store-row-sub {{#if isSelectedStoreBusinessClass}}selected{{/if}}">
+            <td>{{name}}</td>
+            <td  style="width: 70px">
+              {{# quickRemoveButton collection="StoreClassBusinesses" _id=this._id class="btn btn-sm btn-danger"}}删除{{/quickRemoveButton}}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          增加业务<!-- 还没实现reset成insertForm，因为嫌乱 -->
+        </div>
+        <div class="panel-body">
+          {{#autoForm collection="StoreClassBusinesses" id="insertStoreClassBusinessForm" type=subformType doc=selectedStoreClassBusinessDoc}}
+      			<fieldset>
+      				{{> afQuickField name='name'}}
+              {{> afQuickField name='price'}}
+              {{> afQuickField name='storeId' type="hidden" value=storeId}}
+              {{> afQuickField name='storeClassId' type="hidden" value=storeClassId}}
+      			</fieldset>
+      			<button type="submit" class="btn btn-primary">提交</button>
+      		{{/autoForm}}
+      </div>
+    </div>
+
+  </div><div class="col-xs-1"></div></div>
+  {{/if}}
 </template>

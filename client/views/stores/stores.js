@@ -19,6 +19,13 @@ Template.stores.helpers({
     } else {
       return "insert";
     }
+  },
+  isInsert: function () {
+    if (Session.get("selectedStoreId")) {
+      return false;
+    } else {
+      return true;
+    }
   }
 });
 
@@ -26,16 +33,9 @@ Template.stores.events({
   'click .store-row': function () {
     Session.set("selectedStoreId", this._id);
   },
-  'submit #insertStoreForm': function(event){
-	  //event.preventDefault();
-	  var username = event.currentTarget.creator.value;
-	  userId = Meteor.users.findOne({username:username})._id;
-
+  'click .form-to-insert': function() {
+    Session.set('selectedStoreId', undefined);
   },
-  // 'submit #insertStoreClassForm': function(event){
-	//   var className = event.target.name.value;
-	//   afterInsertStoreClassFormSubmit(className);
-  // }
 });
 
 Template.storeBusinesses.helpers({
@@ -49,11 +49,23 @@ Template.storeBusinesses.helpers({
   storeId: function () {
     return Router.current().params._id;
   },
+  storeClassId: function () {
+    return Session.get("selectedStoreClassId");
+  },
+  storeClassBusinesses: function () {
+    return StoreClassBusinesses.find({storeClassId: Session.get("selectedStoreClassId")});
+  },
   selectedStoreClassDoc: function () {
     return StoreClasses.findOne(Session.get("selectedStoreClassId"));
   },
   isSelectedStoreClass: function () {
     return Session.equals("selectedStoreClassId", this._id);
+  },
+  selectedStoreClassBusinessDoc: function () {
+    return StoreClassBusinesses.findOne(Session.get("selectedStoreClassBusinessId"));
+  },
+  isSelectedStoreBusinessClass: function () {
+    return Session.equals("selectedStoreClassBusinessId", this._id);
   },
   formType: function () {
     if (Session.get("selectedStoreClassId")) {
@@ -62,11 +74,40 @@ Template.storeBusinesses.helpers({
       return "insert";
     }
   },
+  isInsert: function () {
+    if (Session.get("selectedStoreClassId")) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  subformType: function () {
+    if (Session.get("selectedStoreClassBusinessId")) {
+      return "update";
+    } else {
+      return "insert";
+    }
+  },
+  subisInsert: function () {
+    if (Session.get("selectedStoreClassBusinessId")) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 });
 
 Template.storeBusinesses.events({
   'click .store-row': function () {
     Session.set("selectedStoreClassId", this._id);
-
-  }
+  },
+  'click .form-to-insert': function() {
+    Session.set('selectedStoreClassId', undefined);
+  },
+  'click .store-row-sub': function () {
+    Session.set("selectedStoreClassBusinessId", this._id);
+  },
+  'click .sub-form-to-insert': function() {
+    Session.set('selectedStoreClassBusinessId', undefined);
+  },
 });

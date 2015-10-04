@@ -42,6 +42,14 @@ Meteor.publish('storeClasses', function(storeId) {
   }
 });
 
+Meteor.publish('storeClassBusinesses', function(storeId) {
+  if(storeId) {
+    return StoreClassBusinesses.find({storeId: storeId});
+  } else {
+    return StoreClassBusinesses.find();
+  }
+});
+
 Meteor.publish('users', function() {
   return Meteor.users.find();
 });

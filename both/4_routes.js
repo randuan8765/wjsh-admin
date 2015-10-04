@@ -34,8 +34,18 @@ Router.route('/areas/:_id', {
 Router.route('/stores', {name: 'stores'});
 Router.route('/stores/:_id', {
   name: 'store.businesses',
-  waitOn: function () {
-    return Meteor.subscribe("storeClasses", this.params._id);
+  subscriptions: function () {
+    var array = [];
+    array.push(Meteor.subscribe("storeClasses", this.params._id));
+    array.push(Meteor.subscribe("storeClassBusinesses", this.params._id));
+    return array;
+  },
+  action: function() {
+    if (this.ready()) {
+      this.render();
+    } else {
+      this.render('Loading');
+    }
   },
   data: function() {
     return Stores.findOne({_id: this.params._id});

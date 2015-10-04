@@ -341,7 +341,7 @@ Schemas.Stores = new SimpleSchema({
   			return "noUser";
   		}
     },
-    // unique: false
+    unique: false
   },
   area : {
     type: String,
@@ -408,6 +408,31 @@ Schemas.StoreClasses = new SimpleSchema({
     label: "分类名称",
   },
   storeId: {
+    type: String,
+    index: 1
+  },
+
+});
+
+Schemas.StoreClassBusinesses = new SimpleSchema({
+  name: {
+    type: String,
+    label: "业务名称",
+  },
+  price: {
+    type: Number,
+    decimal: true,
+    autoform: {
+       step: "0.01"
+    },
+    label: "门店对外定价（选填）",
+    optional: true
+  },
+  storeId: {
+    type: String,
+    index: 1
+  },
+  storeClassId: {
     type: String,
     index: 1
   },

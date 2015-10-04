@@ -31,9 +31,17 @@
       {{/each}}
     </tbody>
   </table>
+  {{#if isInsert}}
+  {{else}}
+    <button type="button" class="btn btn-default form-to-insert pull-right">新门店</button>
+  {{/if}}
   <div class="panel panel-default">
       <div class="panel-heading">
+        {{#if isInsert}}
           <h4>注册新门店</h4>
+        {{else}}
+          <h4>修改门店</h4>
+        {{/if}}
       </div>
       <div class="panel-body">
         {{#autoForm collection="Stores" id="insertStoreForm" type=formType doc=selectedStoreDoc resetOnSuccess=true}}

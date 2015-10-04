@@ -67,33 +67,37 @@ Stores.allow({
   remove: function () { return true; }
 });
 
+Stores.after.insert(function (userId, doc) {
+  Meteor.call('Users.insertStoreId', doc.creator, doc._id);
+});
+
+Stores.after.update(function (userId, doc) {
+  Meteor.call('Users.updateStoreId', doc.creator, doc._id);
+});
+
 StoreClasses = new Mongo.Collection("storeClasses");
 
 //StoreClasses.before.insert(function (userId, doc) {
 //  doc.createdAt = new Date();
 //});
 
-StoreClasses.attachSchema(new SimpleSchema({
-  name: {
-    type: String,
-    label: "分类名称",
-  },
-  storeId: {
-    type: String,
-    autoValue: function () {
-      if (this.isSet) {
-        return;
-      }
-      if (this.isInsert) {
-        return Session.get("storeId");
-      } else {
-        this.unset();
-      }
-    }
-  }
-}));
+StoreClasses.attachSchema(Schemas.StoreClasses);
 
 StoreClasses.allow({
+  insert: function () { return true; },
+  update: function () { return true; },
+  remove: function () { return true; }
+});
+
+StoreClassBusinesses = new Mongo.Collection("storeClassBusinesses");
+
+//StoreClasses.before.insert(function (userId, doc) {
+//  doc.createdAt = new Date();
+//});
+
+StoreClassBusinesses.attachSchema(Schemas.StoreClassBusinesses);
+
+StoreClassBusinesses.allow({
   insert: function () { return true; },
   update: function () { return true; },
   remove: function () { return true; }
