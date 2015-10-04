@@ -8,7 +8,7 @@ SimpleSchema.messages({
 
 SimpleSchema.messages({
   "noArea": "系统中没有区域编号为[value]的地区"
-});  
+});
 
 SimpleSchema.messages({
   "noFactory": "系统中没有厂编号为[value]的工厂"
@@ -23,49 +23,55 @@ var temp;
 
 Meteor.isClient && Template.registerHelper("Schemas", Schemas);
 
-Schemas.Classes = new SimpleSchema({
-  name: { //两个值，一个值一个form
+Schemas.Employees = new SimpleSchema({
+  name: {
     type: String,
-    label: "分类",
-    // autoform: {
-    //   type: "select-radio-inline",
-    //   options: function () {
-    //     return [
-    //       {label: "鞋靴", value: "鞋靴"},
-    //       {label: "皮具", value: "皮具"}
-    //     ];
-    //   }
-    // }
+    label: "姓名"
   },
-  flaws: {
-    type: Array,
-    label: "瑕疵"
-  },
-  'flaws.$': {
+  mobile: {
     type: String,
+    label: "手机号"
   },
-  effects: {
-    type: Array,
-    label: "洗后效果"
-  },
-  'effects.$': {
+  staffId: {
     type: String,
+    label: "工号",
+	  unique: true
+	//custom: function () {
+	//	if (Employees.findOne({staffId:this.value}) !== undefined && this.formType == "insert")
+	//	{
+	//		return "uniqueError";
+	//	}
+    //}
   },
-  accessories: {
+  type: {
+    type: String,
+    label: "职务",
+    autoform: {
+      type: "select-radio-inline",
+      options: function () {
+        return [
+          {label: "BD经理", value: "pre"}, //看下怎么设置default
+          {label: "业务经理", value: "post"}
+        ];
+      }
+    },
+    index: 1
+  },
+  registerFormIds: { //每append一条，要记录时间
     type: Array,
-    label: "配件"
+    label: "申请表编号",
+	  optional: true
   },
-  'accessories.$': {
+  'registerFormIds.$': {
     type: String,
   },
 });
 
-Schemas.Factories = new SimpleSchema({ //autoform框架，修改field能直接变更一切schema todo：调格式，按照bootstrap；插入前和修改前加createAt；创建账号
+Schemas.Factories = new SimpleSchema({
   key: {
     type: String,
-    label: "厂遍号"
-    //index: 1,
-    //unique: true
+    label: "厂编号",
+    unique: true
   },
   name: {
     type: String,
@@ -73,25 +79,25 @@ Schemas.Factories = new SimpleSchema({ //autoform框架，修改field能直接�
   },
   aliase: {
     type: String,
-    label: "简称"
-  },
-  'address.city': {
-    type: String,
-    label: "城市",
-    allowedValues: ["天津市"],
+    label: "简称",
+    optional: true
   },
   'address': {
     type: Object,
     label: "地址",
   },
-  'address.district': {
+  // 'address.city': {
+  //   type: String,
+  //   label: "城市",
+  //   allowedValues: ["天津市"],
+  // },
+  // 'address.street': {
+  //   type: String,
+  //   label: "详细地址",
+  // },
+  'address.fullAddress': {
     type: String,
-    label: "行政区",
-    allowedValues: ["南开区","静海县"]
-  },
-  'address.street': {
-    type: String,
-    label: "街道",
+    label: "详细地址",
   },
   contacts: {
     type: Array,
@@ -121,23 +127,14 @@ Schemas.Factories = new SimpleSchema({ //autoform框架，修改field能直接�
     },
     optional: true
   },
-  businesses: {
-    type: Array,
-    label: "成本价目表",
-    optional: true
-  },
-  'businesses.$': {
-    type: Object,
-  },
-  'businesses.$.factory': {
-    type: String,
-    label: "洗涤厂业务编号",
-  },
-  'businesses.$.name': {
+});
+
+Schemas.FactoryBusinesses = new SimpleSchema({
+  name: {
     type: String,
     label: "名称",
   },
-  'businesses.$.price': {
+  price: {
     type: Number,
     decimal: true,
     autoform: {
@@ -145,7 +142,7 @@ Schemas.Factories = new SimpleSchema({ //autoform框架，修改field能直接�
     },
     label: "成本价"
   },
-  'businesses.$.description': {
+  description: {
     type: String,
     label: "描述",
     autoform: {
@@ -153,48 +150,82 @@ Schemas.Factories = new SimpleSchema({ //autoform框架，修改field能直接�
     },
     optional: true
   },
+  factoryId: {
+    type: String,
+    label: "工厂ID",
+    index: 1
+  }
 });
 
-Schemas.Areas = new SimpleSchema({ //autoform框架，修改field能直接变更一切schema todo：调格式，按照bootstrap
+Schemas.Classes = new SimpleSchema({
+  name: {
+    type: String,
+    label: "分类",
+  },
+  flaws: {
+    type: Array,
+    label: "瑕疵"
+  },
+  'flaws.$': {
+    type: String,
+  },
+  effects: {
+    type: Array,
+    label: "洗后效果"
+  },
+  'effects.$': {
+    type: String,
+  },
+  accessories: {
+    type: Array,
+    label: "配件"
+  },
+  'accessories.$': {
+    type: String,
+  },
+});
+
+Schemas.Areas = new SimpleSchema({
   key: {
-    type: String, //TJ-NK-01
+    type: String, //12010000000
     label: "区域编号",
-	//custom: function () {
-	//	if (Areas.findOne({key:this.value}) !== undefined)
-	//	{
-	//		return "uniqueError";
-	//	}
-    //}
-    //index: 1,
     unique: true
   },
   name: {
     type: String,
     label: "名称"
   },
-  'preManager': {
-    type: Object,
-    label: "DB经理"
-  },
-  'preManager.name': {
+  preManagerId: {
     type: String,
-    label: "姓名",
+    label: "DB经理",
+    autoform: {
+      type: "select",
+      options: function () {
+        var options = [];
+        Employees.find({type: 'pre'}).fetch().forEach(function (element){
+          options.push({
+            label: element.name+'('+element.staffId+')', value: element._id
+          })
+        })
+        return options
+      },
+    },
   },
-  'preManager.mobile': {
+  postManagerId: {
     type: String,
-    label: "手机号",
-  },
-  'postManager': {
-    type: Object,
-    label: "业务经理"
-  },
-  'postManager.name': {
-    type: String,
-    label: "姓名",
-  },
-  'postManager.mobile': {
-    type: String,
-    label: "手机号",
+    label: "业务经理",
+    autoform: {
+      type: "select",
+      options: function () {
+        var options = [];
+        Employees.find({type: 'post'}).fetch().forEach(function (element){
+          options.push({
+            label: element.name+'('+element.staffId+')', value: element._id
+          })
+        })
+        return options
+      },
+    },
   },
   'description': {
     type: String,
@@ -204,151 +235,137 @@ Schemas.Areas = new SimpleSchema({ //autoform框架，修改field能直接变更
     },
     optional: true
   },
-  businesses: {
-    type: Array,
-    label: "对外售价表",
-    optional: true
-  },
-  'businesses.$': {
-    type: Object,  //后期变成前端自动选取某个洗涤厂，
-                                                //然后多选从该洗涤厂想要继承下来的业务及
-                                                //对应价格，并可调整个别继承下来的价格作
-                                                //为卖给夫妻店的低价 ，但是表结构不变
-  },
-  'businesses.$.factoryKey': {
-    type: String,
-    label: "洗涤厂编号", 
-	custom: function (){
-		temp = this.value
-		if(Factories.findOne({key:this.value}) == undefined){
-			return "noFactory";
-		}
-	}
-  },
-  'businesses.$.key': {
-    type: String,
-    label: "洗涤厂业务编号",
-	custom: function (){
-		if(Factories.findOne({"businesses.factory":this.value,key:temp}) == undefined){
-			return "noFactoryBusiness";
-		}
-	}
-  },
-  'businesses.$.name': {
+});
+
+Schemas.AreaBusinesses = new SimpleSchema({
+  name: {
     type: String,
     label: "名称",
   },
-  'businesses.$.class': {
+  classId: {
     type: String,
     autoform: {
       type: "select-radio-inline",
       options: function () {
         var options = [];
-		Classes.find().fetch().forEach(function (element){
-			options.push({
-				label: element.name, value: element.name
-			}
-			)
-		}
-		)
-		return options
+        Classes.find().fetch().forEach(function (element){
+          options.push({
+            label: element.name, value: element._id
+          })
+        })
+        return options
       }
     },
     label: "所属分类"
   },
-  'businesses.$.price': {
+  factoryId: {
+    type: String,
+    label: "送洗加工厂",
+    autoform: {
+      type: "select",
+      options: function () {
+        var options = [];
+        Factories.find().fetch().forEach(function (element){
+          options.push({
+            label: element.name+'('+element.key+')', value: element._id
+          })
+        })
+        return options
+      }
+    },
+  },
+  factoryBusinessId: {
+    type: String,
+    label: "对应加工厂业务",
+    autoform: {
+      type: "select",
+      options: function () {
+        var options = [];
+        if(Session.get("selectedFactorySelector")) {
+          Meteor.subscribe("factoryBusinesses", Session.get("selectedFactorySelector"));
+          FactoryBusinesses.find().fetch().forEach(function (element){
+            options.push({
+              label: element.name, value: element._id
+            })
+          })
+        }
+        return options
+      }
+    }
+  },
+  price: {
     type: Number,
     decimal: true,
     autoform: {
        step: "0.01"
     },
-    label: "给夫妻店底价"
+    label: "区域定价"
   },
-  'businesses.$.description': {
+  description: {
     type: String,
-    label: "描述（客户可读）",
+    label: "描述（对外）",
     autoform: {
        rows: 3
     },
     optional: true
   },
+  areaId: {
+    type: String,
+    label: "区域ID",
+    index: 1
+  }
 });
 
-Schemas.Employees = new SimpleSchema({ //autoform框架，修改field能直接变更一切schema todo：调格式，按照bootstrap
-  name: {
-    type: String,
-    label: "姓名"
-  },
-  mobile: {
-    type: String,
-    label: "手机号"
-  },
-  staffId: {
-    type: String,
-    label: "工号",
-	unique: true
-	//custom: function () {
-	//	if (Employees.findOne({staffId:this.value}) !== undefined && this.formType == "insert")
-	//	{
-	//		return "uniqueError";
-	//	}
-    //}
-  },
-  type: {
-    type: String,
-    label: "职务",
-    autoform: {
-      type: "select-radio-inline",
-      options: function () {
-        return [
-          {label: "BD经理", value: "pre"}, //看下怎么设置default
-          {label: "业务经理", value: "post"}
-        ];
-      }
-    }
-  },
-  registerFormIds: { //每append一条，要记录时间
-    type: Array,
-    label: "申请表编号",
-	optional: true
-  },
-  'registerFormIds.$': {
-    type: String,
-	optional: true
-  },
-});
 
-Schemas.Stores = new SimpleSchema({ //autoform框架，修改field能直接变更一切schema todo：调格式，按照bootstrap；插入前和修改前加createAt；创建账号
+Schemas.Stores = new SimpleSchema({
+  key: {
+    type: String,
+    label: "门店编号",
+    unique: true
+  },
   name: {
     type: String,
     label: "全称"
   },
   aliase: {
     type: String,
-    label: "简称"
+    label: "简称",
+    optional: true
   },
   creator: {
     type: String,
-    label: "创建用户手机",
-	custom: function () {
-		if (Meteor.users.find({username:this.value}).fetch().length == 0)
-		{
-			return "noUser";
-		}
-    }
+    label: "关联手机账号",
+  	custom: function () {
+      if (Meteor.users.find({username:this.value}).fetch().length == 0)
+  		{
+  			return "noUser";
+  		}
+    },
+    // unique: false
   },
-  area : {//要在area里创建
+  area : {
     type: String,
-    label: "所属区域编号",
-	custom: function (){
-		if(Areas.findOne({key:this.value}) == undefined){
-			return "noArea";
-		}
-	}
+    label: "所属区域",
+    autoform: {
+      type: "select",
+      options: function () {
+        var options = [];
+        Areas.find().fetch().forEach(function (element){
+          options.push({
+            label: element.name+'('+element.key+')', value: element._id
+          })
+        })
+        return options
+      }
+    },
   },
-  street : {
+  'address': {
+    type: Object,
+    label: "地址",
+  },
+  'address.fullAddress': {
     type: String,
-    label: "具体地址",
+    label: "详细地址",
   },
   contacts: {
     type: Array,
@@ -382,5 +399,17 @@ Schemas.Stores = new SimpleSchema({ //autoform框架，修改field能直接变�
     type: String,
     label: "申请表编号",
     optional: true
-  }
+  },
+});
+
+Schemas.StoreClasses = new SimpleSchema({
+  name: {
+    type: String,
+    label: "分类名称",
+  },
+  storeId: {
+    type: String,
+    index: 1
+  },
+
 });

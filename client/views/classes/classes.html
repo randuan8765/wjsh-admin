@@ -5,8 +5,8 @@
       <tr>
         <td>分类</td>
         <td>瑕疵</td>
-		<td>洗后效果</td>
-		<td>配件</td>
+    		<td>洗后效果</td>
+    		<td>配件</td>
         <td style="width: 70px"></td>
       </tr>
     </thead>
@@ -15,8 +15,8 @@
         <tr class="class-row {{#if isSelectedClass}}selected{{/if}}">
           <td>{{name}}</td>
           <td>{{flaws}}</td>
-		  <td>{{effects}}</td>
-		  <td>{{accessories}}</td>
+    		  <td>{{effects}}</td>
+    		  <td>{{accessories}}</td>
           <td style="width: 70px">{{> quickRemoveButton collection="Classes" _id=this._id class="btn btn-sm btn-danger"}}</td>
         </tr>
       {{/each}}

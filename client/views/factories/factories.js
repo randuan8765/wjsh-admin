@@ -25,3 +25,35 @@ Template.factories.events({
     Session.set("selectedFactoryId", this._id);
   }
 });
+
+Template.factoryBusinesses.helpers({
+  factoryBusinesses: function () {
+    return FactoryBusinesses.find();
+  },
+  factory: function () {
+    var factory = Factories.find({_id: Router.current().params._id});
+    return factory.fetch()[0];
+  },
+  factoryId: function () {
+    return Router.current().params._id;
+  },
+  selectedFactoryBusinessDoc: function () {
+    return FactoryBusinesses.findOne(Session.get("selectedFactoryBusinessId"));
+  },
+  isSelectedFactoryBusiness: function () {
+    return Session.equals("selectedFactoryBusinessId", this._id);
+  },
+  formType: function () {
+    if (Session.get("selectedFactoryBusinessId")) {
+      return "update";
+    } else {
+      return "insert";
+    }
+  },
+});
+
+Template.factoryBusinesses.events({
+  'click .factory-row': function () {
+    Session.set("selectedFactoryBusinessId", this._id);
+  }
+});

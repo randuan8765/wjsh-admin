@@ -1,19 +1,32 @@
 <template name="stores">
   <h2>门店列表</h2>
-  <table class="table table-bordered table-hover">
+  <table class="table table-striped table-hover table-condensed">
     <thead>
       <tr>
-        <td>全称</td>
+        <td>门店编号</td>
+        <td>名称</td>
         <td>地域信息</td>
-        <td style="width: 70px"></td>
+        <td style="width: 115px"></td>
       </tr>
     </thead>
     <tbody>
       {{#each stores}}
         <tr class="store-row {{#if isSelectedStore}}selected{{/if}}">
-		  <td>{{name}}</td>
-          <td>{{area}} {{street}}</td>
-          <td style="width: 70px">{{> quickRemoveButton collection="Stores" _id=this._id class="btn btn-sm btn-danger"}}</td>
+		      <td>{{key}}</td>
+          <td>
+            {{#if aliase}}
+              {{aliase}}
+            {{else}}
+              {{name}}
+            {{/if}}
+          </td>
+          <td>{{area}} {{address.fullAddress}}</td>
+          <td style="width: 115px">
+            <a class="btn btn-sm btn-primary" role="button" href="/stores/{{_id}}" >
+              业务
+            </a>
+            {{# quickRemoveButton collection="Stores" _id=this._id class="btn btn-sm btn-danger"}}删除{{/quickRemoveButton}}
+          </td>
         </tr>
       {{/each}}
     </tbody>
@@ -23,32 +36,20 @@
           <h4>注册新门店</h4>
       </div>
       <div class="panel-body">
-        {{#autoForm collection="Stores" id="insertStoreForm" type=formType doc=selectedStoreDoc resetOnSuccess=false}}
-			<fieldset>
-				{{> afQuickField name='name'}}
-				{{> afQuickField name='aliase'}}
-				{{> afQuickField name='creator'}}
-				{{> afQuickField name='area'}}
-				{{> afQuickField name='street'}}
-				{{> afQuickField name='contacts'}}
-				{{> afQuickField name='description'}}
-				{{> afQuickField name='registerFormId'}}
-			</fieldset>
-			<button type="submit" class="btn btn-primary">Submit</button>			
-		{{/autoForm}}
-		{{#autoForm collection="StoreClasses" id="insertStoreClassForm" resetOnSuccess=false type="insert"}}
-			<fieldset>	
-				{{> afQuickField name='name'}}				
-			</fieldset>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		{{/autoForm}}
-		
-		{{#autoForm collection="StoreBusinesses" id="insertStoreBusinesseForm" resetOnSuccess=false type="insert"}}
-			<fieldset>	
-				{{> afFormGroup name="name"}}				
-			</fieldset>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		{{/autoForm}}
+        {{#autoForm collection="Stores" id="insertStoreForm" type=formType doc=selectedStoreDoc resetOnSuccess=true}}
+    			<fieldset>
+            {{> afQuickField name='key'}}
+    				{{> afQuickField name='name'}}
+    				{{> afQuickField name='aliase'}}
+    				{{> afQuickField name='creator'}}
+    				{{> afQuickField name='area'}}
+    				{{> afQuickField name='address'}}
+    				{{> afQuickField name='contacts'}}
+    				{{> afQuickField name='description'}}
+    				{{> afQuickField name='registerFormId'}}
+    			</fieldset>
+    			<button type="submit" class="btn btn-primary">Submit</button>
+    		{{/autoForm}}
       </div>
   </div>
 </template>

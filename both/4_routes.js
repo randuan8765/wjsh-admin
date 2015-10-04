@@ -8,18 +8,36 @@ Router.route('/', {name: 'home'});
 Router.route('/classes', {name: 'classes'});
 Router.route('/employees', {name: 'employees'});
 Router.route('/factories', {name: 'factories'});
-Router.route('/areas', {name: 'areas'});
-Router.route('/stores', {name: 'stores'});
-
-Router.route('/update-each', {
-  name: 'update-each',
+Router.route('/factories/:_id', {
+  name: 'factory.businesses',
   waitOn: function () {
-    return Meteor.subscribe("allItems");
+    console.log('router');
+    return Meteor.subscribe("factoryBusinesses", this.params._id);
+  },
+  data: function() {
+    return Factories.findOne({_id: this.params._id});
   }
 });
-Router.route('/updatepush', {
-  name: 'updatepush'
+
+Router.route('/areas', {name: 'areas'});
+Router.route('/areas/:_id', {
+  name: 'area.businesses',
+  waitOn: function () {
+    return Meteor.subscribe("areaBusinesses", this.params._id);
+  },
+  data: function() {
+    return Areas.findOne({_id: this.params._id});
+    // return Factories.findOne({_id: this.params._id});
+  }
 });
-Router.route('/update-array-item', {
-  name: 'updateArrayItem'
+
+Router.route('/stores', {name: 'stores'});
+Router.route('/stores/:_id', {
+  name: 'store.businesses',
+  waitOn: function () {
+    return Meteor.subscribe("storeClasses", this.params._id);
+  },
+  data: function() {
+    return Stores.findOne({_id: this.params._id});
+  }
 });

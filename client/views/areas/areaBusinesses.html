@@ -1,0 +1,48 @@
+<template name="areaBusinesses">
+  <h2>{{area.name}}区域业务列表</h2>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <td>名称</td>
+        <td>所述分类</td>
+        <td>加工厂</td>
+        <td>加工厂业务</td>
+        <td>区域定价</td>
+        <td style="width: 70px"></td>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each areaBusinesses}}
+        <tr class="area-row {{#if isSelectedAreaBusiness}}selected{{/if}}">
+          <td>{{name}}</td>
+          <td>{{classId}}</td>
+          <td>{{factoryId}}</td>
+          <td>{{factoryBusinessId}}</td>
+          <td>{{price}}</td>
+          <td style="width: 70px">
+            {{# quickRemoveButton collection="AreaBusinesses" _id=this._id class="btn btn-sm btn-danger"}}删除{{/quickRemoveButton}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <div class="panel panel-default">
+      <div class="panel-heading">
+          <h4>添加业务</h4>
+      </div>
+      <div class="panel-body">
+        {{#autoForm collection="AreaBusinesses" id="insertAreaBusinessForm" type=formType doc=selectedAreaBusinessDoc}}
+    			<fieldset>
+    				{{> afQuickField name='name'}}
+            {{> afQuickField name='classId'}}
+            {{> afQuickField name='factoryId'}}
+            {{> afQuickField name='factoryBusinessId'}}
+            {{> afQuickField name='price'}}
+            {{> afQuickField name='description'}}
+            {{> afQuickField name='areaId' type="hidden" value=areaId}}
+    			</fieldset>
+    			<button type="submit" class="btn btn-primary">提交</button>
+    		{{/autoForm}}
+    </div>
+  </div>
+</template>

@@ -28,16 +28,45 @@ Template.stores.events({
   },
   'submit #insertStoreForm': function(event){
 	  //event.preventDefault();
-	  var username = event.target.creator.value;
+	  var username = event.currentTarget.creator.value;
 	  userId = Meteor.users.findOne({username:username})._id;
-	  storeName = event.target.name.value;
-	  
-	  var AreaId = event.currentTarget.area.value;
-	  Session.set("AreaId", AreaId);
-	  synFunction(userId,storeName);
+
   },
-  'submit #insertStoreClassForm': function(event){
-	  var className = event.target.name.value;
-	  afterInsertStoreClassFormSubmit(className);
+  // 'submit #insertStoreClassForm': function(event){
+	//   var className = event.target.name.value;
+	//   afterInsertStoreClassFormSubmit(className);
+  // }
+});
+
+Template.storeBusinesses.helpers({
+  storeClasses: function () {
+    return StoreClasses.find();
+  },
+  store: function () {
+    var store = Stores.find({_id: Router.current().params._id});
+    return store.fetch()[0];
+  },
+  storeId: function () {
+    return Router.current().params._id;
+  },
+  selectedStoreClassDoc: function () {
+    return StoreClasses.findOne(Session.get("selectedStoreClassId"));
+  },
+  isSelectedStoreClass: function () {
+    return Session.equals("selectedStoreClassId", this._id);
+  },
+  formType: function () {
+    if (Session.get("selectedStoreClassId")) {
+      return "update";
+    } else {
+      return "insert";
+    }
+  },
+});
+
+Template.storeBusinesses.events({
+  'click .store-row': function () {
+    Session.set("selectedStoreClassId", this._id);
+
   }
 });

@@ -5,8 +5,8 @@
       <tr>
         <td>姓名</td>
         <td>手机号</td>
-		<td>工号</td>
-		<td>职务</td>
+    		<td>工号</td>
+    		<td>职务</td>
         <td style="width: 70px"></td>
       </tr>
     </thead>
@@ -15,8 +15,8 @@
         <tr class="employee-row {{#if isSelectedEmployee}}selected{{/if}}">
           <td>{{name}}</td>
           <td>{{mobile}}</td>
-		  <td>{{staffId}}</td>
-		  <td>{{type}}</td>
+    		  <td>{{staffId}}</td>
+    		  <td>{{type}}</td>
           <td style="width: 70px">{{> quickRemoveButton collection="Employees" _id=this._id class="btn btn-sm btn-danger"}}</td>
         </tr>
       {{/each}}
@@ -28,17 +28,17 @@
       </div>
       <div class="panel-body">
 	    {{#autoForm collection="Employees" id="insertEmployeeForm" type=formType doc=selectedEmployeeDoc}}
-		 <fieldset>
-		  {{> afQuickField name='name'}}
-		  {{> afQuickField name='mobile'}}
-		  {{> afQuickField name='staffId'}}
-		  {{> afQuickField name='type' class='type'}}
-		  {{#if showRegisterForm}}
-		  {{> afQuickField name='registerFormIds'}}
-		  {{/if}}
-		 </fieldset>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		{{/autoForm}}
+    		 <fieldset>
+    		  {{> afQuickField name='name'}}
+    		  {{> afQuickField name='mobile'}}
+    		  {{> afQuickField name='staffId'}}
+    		  {{> afQuickField name='type' class='type'}}
+    		  {{#if showRegisterForm}}
+    		    {{> afQuickField name='registerFormIds'}}
+    		  {{/if}}
+    		 </fieldset>
+  			<button type="submit" class="btn btn-primary">Submit</button>
+  		{{/autoForm}}
       </div>
   </div>
 </template>
