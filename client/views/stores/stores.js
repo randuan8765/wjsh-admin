@@ -1,7 +1,5 @@
 Meteor.subscribe('stores');
 Meteor.subscribe('users');
-var userId;
-var storeName;
 
 Template.stores.helpers({
   stores: function () {
@@ -53,7 +51,7 @@ Template.storeBusinesses.helpers({
     return Session.get("selectedStoreClassId");
   },
   storeClassBusinesses: function () {
-    return StoreClassBusinesses.find({storeClassId: Session.get("selectedStoreClassId")});
+    return StoreBusinesses.find({storeClassId: Session.get("selectedStoreClassId")});
   },
   selectedStoreClassDoc: function () {
     return StoreClasses.findOne(Session.get("selectedStoreClassId"));
@@ -62,7 +60,7 @@ Template.storeBusinesses.helpers({
     return Session.equals("selectedStoreClassId", this._id);
   },
   selectedStoreClassBusinessDoc: function () {
-    return StoreClassBusinesses.findOne(Session.get("selectedStoreClassBusinessId"));
+    return StoreBusinesses.findOne(Session.get("selectedStoreClassBusinessId"));
   },
   isSelectedStoreBusinessClass: function () {
     return Session.equals("selectedStoreClassBusinessId", this._id);

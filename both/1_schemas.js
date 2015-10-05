@@ -195,9 +195,13 @@ Schemas.Areas = new SimpleSchema({
     type: String,
     label: "名称"
   },
-  preManagerId: {
+  'preManager': {
+    type: Object,
+    label: "BD经理"
+  },
+  'preManager.preManagerId': {
     type: String,
-    label: "DB经理",
+    label: "姓名",
     autoform: {
       type: "select",
       options: function () {
@@ -211,9 +215,13 @@ Schemas.Areas = new SimpleSchema({
       },
     },
   },
-  postManagerId: {
+  'postManager': {
+    type: Object,
+    label: "业务经理"
+  },
+  'postManager.postManagerId': {
     type: String,
-    label: "业务经理",
+    label: "姓名",
     autoform: {
       type: "select",
       options: function () {
@@ -329,21 +337,21 @@ Schemas.Stores = new SimpleSchema({
   },
   aliase: {
     type: String,
-    label: "简称",
+    label: "简称(用户可见)",
     optional: true
   },
   creator: {
     type: String,
     label: "关联手机账号",
-  	custom: function () {
-      if (Meteor.users.find({username:this.value}).fetch().length == 0)
-  		{
-  			return "noUser";
-  		}
-    },
-    unique: false
+  	// custom: function () {//测试用先注释掉，晚点恢复
+    //   if (Meteor.users.find({username:this.value}).fetch().length == 0)
+  	// 	{
+  	// 		return "noUser";
+  	// 	}
+    // },
+    // unique: false
   },
-  area : {
+  areaId : {
     type: String,
     label: "所属区域",
     autoform: {
@@ -414,7 +422,7 @@ Schemas.StoreClasses = new SimpleSchema({
 
 });
 
-Schemas.StoreClassBusinesses = new SimpleSchema({
+Schemas.StoreBusinesses = new SimpleSchema({
   name: {
     type: String,
     label: "业务名称",

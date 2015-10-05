@@ -47,6 +47,35 @@ Areas.allow({
   remove: function () { return true; }
 });
 
+Areas.before.insert(function (userId, doc) {
+  var preManager = Employees.findOne(doc.preManager.preManagerId);
+  doc.preManager.preManagerName = preManager.name;
+  doc.preManager.preManagerStaffId = preManager.staffId;
+  doc.preManager.preManagerMobile = preManager.mobile;
+
+  var postManager = Employees.findOne(doc.postManager.postManagerId);
+  doc.postManager.postManagerName = postManager.name;
+  doc.postManager.postManagerStaffId = postManager.staffId;
+  doc.postManager.postManagerMobile = postManager.mobile;
+});
+
+Areas.before.update(function (userId, doc, fieldNames, modifier, options) {
+  modifier.$set = modifier.$set || {};
+  console.log("modifier.$set");
+  console.log(modifier);
+  var preManager = Employees.findOne(doc.preManager.preManagerId);
+  modifier.$set["preManager.preManagerName"] = preManager.name;
+  modifier.$set["preManager.preManagerStaffId"] = preManager.staffId;
+  modifier.$set["preManager.preManagerMobile"] = preManager.mobile;
+  console.log("modifier.$set  after");
+  console.log(modifier.$set);
+
+  var postManager = Employees.findOne(doc.postManager.postManagerId);
+  modifier.$set["postManager.postManagerName"] = postManager.name;
+  modifier.$set["postManager.postManagerStaffId"] = postManager.staffId;
+  modifier.$set["postManager.postManagerMobile"] = postManager.mobile;
+});
+
 FactoryBusinesses = new Mongo.Collection("factoryBusinesses");
 FactoryBusinesses.attachSchema(Schemas.FactoryBusinesses);
 
@@ -89,15 +118,15 @@ StoreClasses.allow({
   remove: function () { return true; }
 });
 
-StoreClassBusinesses = new Mongo.Collection("storeClassBusinesses");
+StoreBusinesses = new Mongo.Collection("storeBusinesses");
 
 //StoreClasses.before.insert(function (userId, doc) {
 //  doc.createdAt = new Date();
 //});
 
-StoreClassBusinesses.attachSchema(Schemas.StoreClassBusinesses);
+StoreBusinesses.attachSchema(Schemas.StoreBusinesses);
 
-StoreClassBusinesses.allow({
+StoreBusinesses.allow({
   insert: function () { return true; },
   update: function () { return true; },
   remove: function () { return true; }

@@ -42,11 +42,11 @@ Meteor.publish('storeClasses', function(storeId) {
   }
 });
 
-Meteor.publish('storeClassBusinesses', function(storeId) {
+Meteor.publish('storeBusinesses', function(storeId) {
   if(storeId) {
-    return StoreClassBusinesses.find({storeId: storeId});
+    return StoreBusinesses.find({storeId: storeId});
   } else {
-    return StoreClassBusinesses.find();
+    return StoreBusinesses.find();
   }
 });
 

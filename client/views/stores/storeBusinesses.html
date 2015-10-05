@@ -48,7 +48,7 @@
     <table class="table table-striped table-hover">
       <thead>
         <tr>
-          <td>分类</td>
+          <td>业务</td>
           <td style="width: 70px"></td>
         </tr>
       </thead>
@@ -57,7 +57,7 @@
           <tr class="store-row-sub {{#if isSelectedStoreBusinessClass}}selected{{/if}}">
             <td>{{name}}</td>
             <td  style="width: 70px">
-              {{# quickRemoveButton collection="StoreClassBusinesses" _id=this._id class="btn btn-sm btn-danger"}}删除{{/quickRemoveButton}}
+              {{# quickRemoveButton collection="StoreBusinesses" _id=this._id class="btn btn-sm btn-danger"}}删除{{/quickRemoveButton}}
             </td>
           </tr>
         {{/each}}
@@ -69,7 +69,7 @@
           增加业务<!-- 还没实现reset成insertForm，因为嫌乱 -->
         </div>
         <div class="panel-body">
-          {{#autoForm collection="StoreClassBusinesses" id="insertStoreClassBusinessForm" type=subformType doc=selectedStoreClassBusinessDoc}}
+          {{#autoForm collection="StoreBusinesses" id="insertStoreClassBusinessForm" type=subformType doc=selectedStoreClassBusinessDoc}}
       			<fieldset>
       				{{> afQuickField name='name'}}
               {{> afQuickField name='price'}}

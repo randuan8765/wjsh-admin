@@ -37,7 +37,7 @@ Router.route('/stores/:_id', {
   subscriptions: function () {
     var array = [];
     array.push(Meteor.subscribe("storeClasses", this.params._id));
-    array.push(Meteor.subscribe("storeClassBusinesses", this.params._id));
+    array.push(Meteor.subscribe("storeBusinesses", this.params._id));
     return array;
   },
   action: function() {
