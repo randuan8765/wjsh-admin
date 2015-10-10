@@ -61,14 +61,10 @@ Areas.before.insert(function (userId, doc) {
 
 Areas.before.update(function (userId, doc, fieldNames, modifier, options) {
   modifier.$set = modifier.$set || {};
-  console.log("modifier.$set");
-  console.log(modifier);
   var preManager = Employees.findOne(doc.preManager.preManagerId);
   modifier.$set["preManager.preManagerName"] = preManager.name;
   modifier.$set["preManager.preManagerStaffId"] = preManager.staffId;
   modifier.$set["preManager.preManagerMobile"] = preManager.mobile;
-  console.log("modifier.$set  after");
-  console.log(modifier.$set);
 
   var postManager = Employees.findOne(doc.postManager.postManagerId);
   modifier.$set["postManager.postManagerName"] = postManager.name;
@@ -96,19 +92,29 @@ Stores.allow({
   remove: function () { return true; }
 });
 
+Stores.before.insert(function (userId, doc) {
+  doc.orderCount = 0;
+});
+
 Stores.after.insert(function (userId, doc) {
   Meteor.call('Users.insertStoreId', doc.creator, doc._id);
 });
 
-Stores.after.update(function (userId, doc) {
+Stores.after.update(function (userId, doc, fieldNames, modifier, options) {
+  Meteor.call('Users.unsetStoreId', this.previous.creator); //其实应该判断下改前和改后的值是否相等
   Meteor.call('Users.updateStoreId', doc.creator, doc._id);
+
+
 });
 
 StoreClasses = new Mongo.Collection("storeClasses");
 
-//StoreClasses.before.insert(function (userId, doc) {
-//  doc.createdAt = new Date();
-//});
+StoreClasses.before.insert(function (userId, doc) {
+  var storeClasses = StoreClasses.find({storeId: doc.storeId}).fetch();
+  var colorSet = ['calm', 'balanced', 'energized', 'assertive', 'royal'];
+  doc.color = colorSet[storeClasses.length];
+ // doc.createdAt = new Date();
+});
 
 StoreClasses.attachSchema(Schemas.StoreClasses);
 
@@ -130,4 +136,24 @@ StoreBusinesses.allow({
   insert: function () { return true; },
   update: function () { return true; },
   remove: function () { return true; }
+});
+
+StoreBusinesses.before.insert(function (userId, doc) {
+  if(!doc.areaBusinessIds) {
+    return ;
+  }
+  doc.areaBusiness = new Array();
+  for(var i = 0; i < doc.areaBusinessIds.length; i ++) {
+    var area = AreaBusinesses.findOne(doc.areaBusinessIds[i]);
+    doc.areaBusiness.push({"areaBusinessId": area._id, "areaBusinessName": area.name, "areaBusinessPrice": area.price});
+  }
+});
+
+StoreBusinesses.before.update(function (userId, doc, fieldNames, modifier, options) {
+  modifier.$set = modifier.$set || {};
+  modifier.$set.areaBusiness = new Array();
+  for(var i = 0; i < modifier.$set.areaBusinessIds.length; i ++) {
+    var area = AreaBusinesses.findOne(modifier.$set.areaBusinessIds[i]);
+    modifier.$set.areaBusiness.push({"areaBusinessId": area._id, "areaBusinessName": area.name, "areaBusinessPrice": area.price});
+  }
 });

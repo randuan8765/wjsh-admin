@@ -1,6 +1,6 @@
 Meteor.publish('classes', function() {
   return Classes.find();
-});
+});//test
 
 Meteor.publish('employees', function() {
   return Employees.find();

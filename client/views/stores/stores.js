@@ -24,6 +24,13 @@ Template.stores.helpers({
     } else {
       return true;
     }
+  },
+  isUpdate: function () {
+    if (Session.get("selectedStoreId")) {
+      return true;
+    } else {
+      return false;
+    }
   }
 });
 

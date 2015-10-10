@@ -27,7 +27,6 @@ Router.route('/areas/:_id', {
   },
   data: function() {
     return Areas.findOne({_id: this.params._id});
-    // return Factories.findOne({_id: this.params._id});
   }
 });
 
@@ -38,10 +37,12 @@ Router.route('/stores/:_id', {
     var array = [];
     array.push(Meteor.subscribe("storeClasses", this.params._id));
     array.push(Meteor.subscribe("storeBusinesses", this.params._id));
+    array.push(Meteor.subscribe("areaBusinesses", Stores.findOne({_id: this.params._id}).areaId));
     return array;
   },
   action: function() {
     if (this.ready()) {
+      Session.set("storeId", this.params._id);
       this.render();
     } else {
       this.render('Loading');

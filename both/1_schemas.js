@@ -183,6 +183,13 @@ Schemas.Classes = new SimpleSchema({
   'accessories.$': {
     type: String,
   },
+  colors: {
+    type: Array,
+    label: "颜色"
+  },
+  'colors.$': {
+    type: String,
+  },
 });
 
 Schemas.Areas = new SimpleSchema({
@@ -195,7 +202,7 @@ Schemas.Areas = new SimpleSchema({
     type: String,
     label: "名称"
   },
-  'preManager': {
+  'preManager': { //preManager.preManagerName,preManager.preManagerStaffId,preManager.preManagerMobile 创建在before.insert中
     type: Object,
     label: "BD经理"
   },
@@ -343,13 +350,13 @@ Schemas.Stores = new SimpleSchema({
   creator: {
     type: String,
     label: "关联手机账号",
-  	// custom: function () {//测试用先注释掉，晚点恢复
-    //   if (Meteor.users.find({username:this.value}).fetch().length == 0)
-  	// 	{
-  	// 		return "noUser";
-  	// 	}
-    // },
-    // unique: false
+  	custom: function () {
+      if (Meteor.users.find({username:this.value}).fetch().length == 0)
+  		{
+  			return "noUser";
+  		}
+    },
+    unique: true
   },
   areaId : {
     type: String,
@@ -419,7 +426,6 @@ Schemas.StoreClasses = new SimpleSchema({
     type: String,
     index: 1
   },
-
 });
 
 Schemas.StoreBusinesses = new SimpleSchema({
@@ -434,15 +440,35 @@ Schemas.StoreBusinesses = new SimpleSchema({
        step: "0.01"
     },
     label: "门店对外定价（选填）",
-    optional: true
+    optional: true,
+    defaultValue: 0
   },
+
+  areaBusinessIds: {
+    type: [String],
+    label: "对应区域业务",
+    autoform: {
+      type: "select-multiple",
+      options: function () {
+        var options = [];
+        var areaId = Stores.findOne(Session.get("storeId")).areaId;
+        AreaBusinesses.find({areaId: areaId}).fetch().forEach(function (element){
+          options.push({
+            label: element.name, value: element._id
+          })
+        })
+        return options;
+      }
+    }
+  },
+
   storeId: {
     type: String,
-    index: 1
+    // index: 1  will create compound index:db.storeBusinesses.createIndex({storeId:1,storeClassId:1}) in mongdb shell directly
   },
   storeClassId: {
     type: String,
-    index: 1
+    // index: 1
   },
 
 });
