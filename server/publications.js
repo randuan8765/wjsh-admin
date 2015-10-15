@@ -50,6 +50,14 @@ Meteor.publish('storeBusinesses', function(storeId) {
   }
 });
 
+Meteor.publish('items', function(storeId) {
+  if(storeId) {
+    return Items.find({'business.storeId': storeId});
+  } else {
+    return Items.find();//等多了记得加上限
+  }
+});
+
 Meteor.publish('users', function() {
   return Meteor.users.find();
 });

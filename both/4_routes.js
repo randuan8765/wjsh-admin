@@ -52,3 +52,25 @@ Router.route('/stores/:_id', {
     return Stores.findOne({_id: this.params._id});
   }
 });
+Router.route('/stores/:_id/orders', {
+  name: 'store.orders',
+  subscriptions: function () {
+    var array = [];
+    // array.push(Meteor.subscribe("storeOrders", this.params._id));
+    array.push(Meteor.subscribe("areaBusinesses"));
+    array.push(Meteor.subscribe("factoryBusinesses"));
+    array.push(Meteor.subscribe("items", this.params._id));
+    return array;
+  },
+  action: function() {
+    if (this.ready()) {
+      Session.set("storeId", this.params._id);
+      this.render();
+    } else {
+      this.render('Loading');
+    }
+  },
+  data: function() {
+    return Stores.findOne({_id: this.params._id});
+  }
+});

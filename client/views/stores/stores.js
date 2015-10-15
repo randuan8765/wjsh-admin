@@ -116,3 +116,53 @@ Template.storeBusinesses.events({
     Session.set('selectedStoreClassBusinessId', undefined);
   },
 });
+
+
+
+Template.storeOrders.helpers({
+  storeItems: function () {
+    return Items.find();
+  },
+  transferFactoryName: function(id) {
+    return Factories.findOne(id).name;
+  },
+  transferFactoryBusinessName: function(id) {
+    return FactoryBusinesses.findOne(id).name;
+  },
+  store: function () {
+    var store = Stores.find({_id: Router.current().params._id});
+    return store.fetch()[0];
+  },
+  // storeId: function () {
+  //   return Router.current().params._id;
+  // },
+  // storeClassId: function () {
+  //   return Session.get("selectedStoreClassId");
+  // },
+  // storeClassBusinesses: function () {
+  //   return StoreBusinesses.find({storeClassId: Session.get("selectedStoreClassId")});
+  // },
+  selectedItemDoc: function () {
+    return Items.findOne(Session.get("selectedItemId"));
+  },
+  isSelectedItem: function () {
+    return Session.equals("selectedItemId", this._id);
+  },
+  isCleaning: function() {
+    if(!Session.get("selectedItemId")) {
+      return false;
+    }
+    return Items.findOne(Session.get("selectedItemId")).status == 'cleaning';
+  }
+});
+
+Template.storeOrders.events({
+  'click .item-row': function () {
+    console.log('click');
+    Session.set("selectedItemId", this._id);
+  },
+  // 'click .form-to-insert': function() {
+  //   Session.set('selectedStoreClassId', undefined);
+  // },
+
+});

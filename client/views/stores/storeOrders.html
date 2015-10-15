@@ -1,0 +1,47 @@
+<template name="storeOrders">
+  <h2>{{store.name}}门店订单</h2>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <td>标签号</td>
+        <td>门店业务名</td>
+        <td>悟浄业务名</td>
+        <td>工厂业务名</td>
+        <td>沙师递</td>
+        <td>状态</td>
+        <td>创建时间</td>
+
+      </tr>
+    </thead>
+    <tbody>
+      {{#each storeItems}}
+        <tr class="item-row {{#if isSelectedItem}}selected{{/if}}">
+          <td>{{orderKey}}-{{subKey}}</td>
+          <td>{{business.name}}</td>
+          <td>{{#if actualBusiness}}{{actualBusiness.areaBusinessName}}{{/if}}</td>
+          <td>{{#if actualBusiness}}{{transferFactoryName actualBusiness.factoryId}}-{{transferFactoryBusinessName actualBusiness.factoryBusinessId}}{{/if}}</td>
+          <td>{{#if track}}{{track.[0].driverName}}{{/if}}</td>
+          <td>{{transferStatus status}}</td>
+          <td>{{formatDate createdAt}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <div class="panel panel-default">
+      <div class="panel-heading">
+          <h4>更改订单状态</h4>
+      </div>
+      <div class="panel-body">
+	    {{#autoForm collection="Items" id="updateItemForm" type='update' doc=selectedItemDoc}}
+    		 <fieldset>
+    		  {{> afQuickField name='actualBusiness'}}
+          <!--{{> afQuickField name='actualFlaws'}}-->
+          {{#if isCleaning}}
+            {{> afQuickField name='status'}}
+          {{/if}}
+    		 </fieldset>
+  			<button type="submit" class="btn btn-primary">Submit</button>
+  		{{/autoForm}}
+      </div>
+  </div>
+</template>

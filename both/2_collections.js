@@ -142,18 +142,54 @@ StoreBusinesses.before.insert(function (userId, doc) {
   if(!doc.areaBusinessIds) {
     return ;
   }
-  doc.areaBusiness = new Array();
+  doc.areaBusinesses = new Array();
   for(var i = 0; i < doc.areaBusinessIds.length; i ++) {
     var area = AreaBusinesses.findOne(doc.areaBusinessIds[i]);
-    doc.areaBusiness.push({"areaBusinessId": area._id, "areaBusinessName": area.name, "areaBusinessPrice": area.price});
+    doc.areaBusinesses.push({"areaBusinessId": area._id, "areaBusinessName": area.name, "areaBusinessPrice": area.price});
   }
 });
 
 StoreBusinesses.before.update(function (userId, doc, fieldNames, modifier, options) {
   modifier.$set = modifier.$set || {};
-  modifier.$set.areaBusiness = new Array();
+  modifier.$set.areaBusinesses = new Array();
   for(var i = 0; i < modifier.$set.areaBusinessIds.length; i ++) {
     var area = AreaBusinesses.findOne(modifier.$set.areaBusinessIds[i]);
-    modifier.$set.areaBusiness.push({"areaBusinessId": area._id, "areaBusinessName": area.name, "areaBusinessPrice": area.price});
+    modifier.$set.areaBusinesses.push({"areaBusinessId": area._id, "areaBusinessName": area.name, "areaBusinessPrice": area.price});
   }
+});
+
+Items = new Mongo.Collection("items");
+Items.attachSchema(Schemas.Items);
+
+Items.allow({
+  insert: function () { return true; },
+  update: function () { return true; },
+  remove: function () { return true; }
+});
+
+
+Items.before.update(function (userId, doc, fieldNames, modifier, options) {
+  modifier.$set = modifier.$set || {};
+  console.log(doc);
+  console.log(modifier);
+
+  if(modifier.$unset) {
+    console.log('unset');
+    return ;
+  }
+  if(modifier.$set['actualBusiness.areaBusinessId']) {
+    var areaBusiness = AreaBusinesses.findOne(modifier.$set['actualBusiness.areaBusinessId']);
+    modifier.$set['actualBusiness.areaBusinessName'] = areaBusiness.name;
+    modifier.$set['actualBusiness.areaBusinessPrice'] = areaBusiness.price;
+
+    modifier.$set['actualBusiness.factoryId'] = areaBusiness.factoryId;
+    modifier.$set['actualBusiness.factoryBusinessId'] = areaBusiness.factoryBusinessId;
+
+    if(doc.status == 'toClean') {
+      console.log(doc.status);
+      modifier.$set.status = 'cleaning';
+    }
+    return ;
+  }
+
 });

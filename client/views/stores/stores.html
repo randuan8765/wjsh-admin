@@ -6,7 +6,7 @@
         <td>门店编号</td>
         <td>名称</td>
         <td>地域信息</td>
-        <td style="width: 115px"></td>
+        <td style="width: 165px"></td>
       </tr>
     </thead>
     <tbody>
@@ -21,7 +21,10 @@
             {{/if}}
           </td>
           <td>{{areaId}} {{address.fullAddress}}</td>
-          <td style="width: 115px">
+          <td style="width: 165px">
+            <a class="btn btn-sm btn-primary" role="button" href="/stores/{{_id}}/orders" >
+              订单
+            </a>
             <a class="btn btn-sm btn-primary" role="button" href="/stores/{{_id}}" >
               业务
             </a>

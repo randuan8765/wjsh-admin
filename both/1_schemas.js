@@ -472,3 +472,58 @@ Schemas.StoreBusinesses = new SimpleSchema({
   },
 
 });
+
+Schemas.Items = new SimpleSchema({
+  'actualBusiness': {
+    type: Object,
+    label: "实际业务信息",
+    optional: true,
+  },
+  'actualBusiness.areaBusinessId': {
+    type: String,
+    label: "悟浄区域业务(临时方案：如果修改此选项，订单状态将变为清洗中)",
+
+    autoform: {
+      type: "select",
+      options: function () {
+        var options = [];
+        if(Session.get('selectedItemId')) {
+          var areaBusinessIds = Items.findOne(Session.get('selectedItemId')).business.areaBusinessIds;
+
+          AreaBusinesses.find({_id: { $in: areaBusinessIds }}).fetch().forEach(function (element){
+            options.push({
+              label: element.name+'('+element.price+')', value: element._id
+            })
+          })
+        }
+
+        return options;
+      }
+    },
+  },
+  // actualFlaws: {
+  //   type: [String],
+  //   label: "瑕疵",
+  //   autoform: {
+  //     type: "select-multiple",
+  //     options: function () {根据areaBusiness-》class-》瑕疵
+  //       console.log(Items.findOne(Session.get('selectedItemId')));
+  //       var flaws = Items.findOne(Session.get('selectedItemId')).flaws;
+  //       return _.keys(flaws);
+  //     }
+  //   }
+  // },
+  status: {
+    type: String,
+    label: "订单状态",
+    autoform: {
+      type: "select",
+      options: function () {
+        return [
+          {label: "已送回店中", value: "returnedToStore"}
+        ];
+      }
+    },
+    optional: true
+  }
+});
